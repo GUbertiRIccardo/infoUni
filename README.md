@@ -37,6 +37,7 @@
  - `awk '{print $2, $5}' pWeb2.txt` $num seleziona la colonna desiderata, si usa per selezionare
   - `awk '!/Resid/ {print $2, $5, $6/$7}' pWeb3.txt` Solo le linee che non (!) contengono stringa “Resid”,Divisione tra colonne
   - `awk '{n=n+1; s=s+$3} END{print "Media " s/n}' pWeb3.txt` fa la media di una colonna
+```bash
     Stampa il prodotto delle colonne 2 e 4 se la riga contiene “MHz”
     [fisica@linux]$ awk '/MHz/ {print "prodotto= " $2*$4 }' file
     ...
@@ -55,3 +56,4 @@
     ...
     Stampa solo le righe comprese tra la parola inizio e quella fine
     [fisica@linux]$ awk '/inizio/,/fine/' file
+```
