@@ -2,6 +2,27 @@
 # Comandi importanti
  - `tar czf ilbackup.tgz tesi` per zippare con tar
  - `chmod +x ciao.sh` per rendere eseguibili i file
+ - `ssh studente@pcatl01.pv.infn.it` per collegarsi a un pc, dopo va inserita la password
+ - `scp studente@pcatl01.pv.infn.it:/etc/passwd .` Copia il file /etc/passwd dal nodo remoto, alla directory corrente del nodo locale “.”
+ - `scp dati.txt studente@pcatl01.pv.infn.it:.` Copia il file dati.txt dal computer locale, alla home directory di studente sul nodo remoto
+
+# ERRORI FREQUENTI SSH/SCP
+```
+Dimenticare il “:”
+– Senza “:” significa “destinazione locale”, quindi viene
+creato in locale un file il cui nome sarà il 2° parametro
+● Dimenticare l’utente
+– Il sistema assume che lo username di destinazione
+sia uguale a quello corrente (fisica in questo caso)
+● Dimenticare il parametro di destinazione
+– Qui manca il parametro di destinazione! Per es.
+potrebbe essere un “.” per indicare la dir corrente
+
+[fisica@linux]$ scp dati.txt studente@pcatl01.pv.infn.it
+[fisica@linux]$ scp dati.txt pcatl01.pv.infn.it:.
+[fisica@linux]$ scp studente@xxx.unipv.it:/etc/passwd
+```
+
 # Variabili
 Le variabili sono
  – assegnate con l’operatore =
@@ -125,7 +146,7 @@ Il costrutto if-then-else in bash
 – La comparazione è tra [ ] e seguita da then
 ● NB: gli spazi attorno a “[“ e “]” sono necessari!!
 – Gli operatori sono: -gt, -eq, -ne, -lt (dettagli qui)
-– E' possibile aggiungere elif ed else
+– E possibile aggiungere elif ed else
 if [ $X -gt 42 ] # Se la variabile X è maggiore di 42
 then
  # Fai una determinata operazione
@@ -158,4 +179,49 @@ do
 
  mv -v $OLDNAME $NEWNAME
 done
+```
+Esempio quanta gente connessa alla rete
+```bash
+BASE=192.168.1. # Rete da esplorare
+for i in `seq 1 254` # loop per i che va da 1 a 254
+do
+ IND=$BASE$i # indirizzo, es: 192.168.1.7
+ ping -c 1 -W 1 $IND > /dev/null # esegue ping
+ # buttando via l'output
+ if [ $? -eq 0 ] # se ping ritorna OK (0)
+ then echo "$IND usato" # scrive: 192.168.1.x usato
+ else echo "$IND" # oppure scrive: 192.168.1.x
+ fi
+done
+```
+# Network
+> L'ip è visibile tramite `ifconfig` oppure `ip addr`
+```
+lo: loopback, il nodo stesso
+eth: scheda ethernet (cavo)
+wlan: schema wireless
+```
+- `host 193.204.35.100` o `host www.infn.it` ti danno a chi sono mappati i siti o gli ip
+- `ping info.cern.ch` per verificare se un nodo è attivo
+- `tracepath www.infn.it` per tracciare da dove viene un pacchetto dati
+- `telnet info.cern.ch 80` ti connette a mano alle porte di quel nodo
+- `telnet smtp.mioserver.it 25` si può anche mandare una mail...
+- `netstat -t` mostra l'elenco delle connessioni aperte
+- `lsof` mostra anche i file aperti
+- I file in `/var/log` mostrano i log di sistema
+- `nmap -A -T4 192.168.1.1` scopre le porte aperte su un host, con l'indirizzo del router LAN
+- `nmap 192.168.1.1-255` scan completo della rete locale
+- `tcpdump -i eth0` Traffico dati visto dalla scheda di rete ethernet in mezzo secondo su una rete del dipartimento.
+```bash
+# Sniff di tutti i pacchetti visti dall'interfaccia ethernet
+[root@linux]$ tcpdump -i eth0
+...
+# Sniff di tutti i pacchetti verso un host specifico
+[root@linux]$ tcpdump -i eth0 host un.nodo.it
+...
+# Sniff di tutti i pacchetti dal nodo A al nodo B
+[root@linux]$ tcpdump -i eth0 src nodoA.it dst nodoB.it
+...
+# Sniff del solo traffico www
+[root@linux]$ tcpdump -i eth0 port 80
 ```
