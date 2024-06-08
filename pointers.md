@@ -119,3 +119,47 @@ int main()
  return 0;
 }
 ```
+Swap coi puntatori
+```cpp
+#include <iostream>
+void swap(int *a, int *b) // NB: ora riceve puntatori!
+{ // Scambia il contenuto di 2 variabili usando puntatori
+ std::cout << "swap " << *a<< " " << *b<< std::endl;
+ int tmp = *a;
+ *a = *b;
+ *b = tmp;
+ std::cout << "swap " << *a<< " " << *b<< std::endl;
+}
+int main()
+{
+ int x = 0;
+ int y = 7;
+ std::cout << "main " << x << " " << y << std::endl;
+ swap(&x, &y); // Chiamata di swap
+ std::cout << "main " << x << " " << y << std::endl;
+ return 0;
+} 
+```
+Swap by ref
+```cpp
+#include <iostream>
+void swap(int &a, int &b)
+{ // Scambia il contenuto di 2 variabili
+ std::cout << "swap " << a << " " << b << std::endl;
+ int tmp = a; // Variabile temporanea per lo scambio
+ a = b;
+ b = tmp;
+ std::cout << "swap " << a << " " << b << std::endl;
+}
+int main()
+{
+ int x = 0;
+ int y = 7;
+ std::cout << "main " << x << " " << y << std::endl;
+ swap(x, y); // Chiamata di swap
+ std::cout << "main " << x << " " << y << std::endl;
+ return 0;
+}
+```
+
+> `int main(int argc, char* argv[]);`
