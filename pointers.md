@@ -35,3 +35,87 @@ int main()
  return 0;
 }
 ```
+Altro esempio:
+```cpp
+#include <iostream>
+int main()
+{
+ float x = 7; // x e' una variabile di tipo float
+ // a cui viene assegnato il valore 7
+ float *p = &x; // p e' una variabile di tipo puntatore a float, a
+ // cui viene assegnato l'indirizzo della variabile x
+ std::cout << "Valore di x: x = " << x << std::endl;
+ std::cout << "Indirizzo di x: &x = " << &x << std::endl;
+ std::cout << "Valore di p: p = " << p << std::endl;
+ std::cout << "Indirizzo di p: &p = " << &p << std::endl;
+ std::cout << "Valore puntato *p = " << *p << std::endl;
+ return 0;
+}
+```
+Puntatori ed array
+```cpp
+#include <iostream>
+#define LEN 10
+int main()
+{
+ // Allocazione di un array di LEN interi
+ int z[LEN] = {1, 2, 3 , 4, 5, 6, 7, 8, 9, 10};
+ // Accesso tramite operatore []
+ for(int i=0; i<LEN; i++)
+ std::cout << z[i] << std::endl
+ // Accesso tramite puntatore. Il loop parte facendo puntare p all'
+ // inizio dell'array (&z[0]) e incrementando il puntatore fino a che
+ // non raggiunge la fine dell'array (z[0]+LEN).
+ for(int *p=&z[0]; p < &z[0] + LEN; p++)
+ std::cout << *p << std::endl; // Stampa dell'elemento puntato
+ return 0;
+}
+```
+Cosa NON fare
+```cpp
+#include <iostream>
+int main()
+{
+ float x = 7; // x e' una variabile di tipo float a cui viene assegnato 7
+ float *p = &x; // p e' una variabile di tipo puntatore a float a
+ // cui viene assegnato l'indirizzo della variabile n
+ *p = 42; // Assegnazione di 42 alla locazione puntata da p,
+ // cioe' la variabile x vale ora 42
+ // Provochiamo un crash simulando un'errata gestione di un puntatore
+ p = p + 1000000; // p ora punta 4MB sopra alla locazione di x
+ // Ora scriviamo nella locazione puntata da p
+ // - Se la locazione e' fuori dalla memoria riservata al processo il
+ // sistema operativo, per motivi di sicurezza, deve uccidere il
+ // processo che morira' con un messaggio "segmentation fault"
+ // - Va peggio se la locazione e' all'interno della memoria del processo:
+ // ne stiamo corrompendo lo stato ma senza ucciderlo e senza saperlo!
+ *p = 137.035; // Qui dovrebbe morire il programma
+ // Esercizio: provare cambiare l'offset del puntatore, es: p = &x + 2;
+ return 0;
+}
+```
+Allocazione dinamica
+```cpp
+#include <iostream>
+int g = 42; // Variabile globale
+int main()
+{
+ int i = 7; // Allocazione spazio per un int
+ { // Nuovo blocco
+ float x[10]; // Spazio per 10 float
+ } // NB: all'uscita dal blocco la variabile
+ // locale x è deallocata in automatico
+ // Allocazione dinamica per n interi.
+ // NB: non nota a priori!
+ std::cout << "Quanto alloco?" << std::endl;
+ int n;
+ std::cin >> n;
+ int *b = new int[n];
+ // b punta alla memoria allocata
+ // Deallocazione manuale da parte dell'utente
+ // quando la memoria non e' piu' necessaria
+ // Altrimenti si ha memory leak
+ delete[] b;
+ return 0;
+}
+```
