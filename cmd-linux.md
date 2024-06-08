@@ -6,6 +6,7 @@
  - `scp studente@pcatl01.pv.infn.it:/etc/passwd .` Copia il file /etc/passwd dal nodo remoto, alla directory corrente del nodo locale “.”
  - `scp dati.txt studente@pcatl01.pv.infn.it:.` Copia il file dati.txt dal computer locale, alla home directory di studente sul nodo remoto
  - `g++ -o hello HelloWorld.cxx` per compilare un file c++
+ - `g++ main.cxx potenza.cxx` per compilare un file e la sua libreria
 
 # ERRORI FREQUENTI SSH/SCP
 ```
