@@ -1,8 +1,24 @@
-# appunti-metodi
+# Appunti
+# Comandi importanti
+ - `tar czf ilbackup.tgz tesi` per zippare con tar
+ - `chmod +x ciao.sh` per rendere eseguibili i file
 # Variabili
+Le variabili sono
+ – assegnate con l’operatore =
+ - NB: Occhio a non lasciare spazi intorno all’=
+ – accedute anteponendo il simbolo $
  - `a=http://www.comuni-italiani.it/province.html` puoi assegnare anche così
  - `links2 -dump $a` per usarla
- - 
+ - Si usa command substitution per:
+ - Assegnare ad una variabile l’output di un comando ```A=`date` B=$(date)```
+ - Popolare i parametri di un comando
+```bash
+shell> echo sono `whoami` e oggi è $(date +%A)
+sono negri e oggi è sabato
+for i in `seq 1 7`; do echo cap$i; done
+for i in $(seq 1 7); do echo cap$i; done
+```
+
 # Comandi Linux non noti
  - `df -h` stampa i filesystems montati e l'utilizzo
  - `df -hT` stampa i dischi montati e l'utilizzo
@@ -78,4 +94,68 @@ Aggiungi spazi all'inizio di ogni linea (simbolo ^)
     [fisica@linux]$ awk '/inizio/,/fine/' file
 ```
 Per i file csv usare:
-> awk 'FS= "," {print $7}' myDataset.csv 
+`awk 'FS= "," {print $7}' myDataset.csv`
+# Script
+Esempio backup tesi:
+```bash
+FIL=ilbackup.`date "+%y%m%d-%H%M"`.tgz
+DIR=tesi
+echo "Sto facendo il backup di $DIR"
+tar czf $FIL $DIR
+echo "Ho fatto il backup di $DIR, il file di archivio e': "
+ls -l $FIL
+```
+Esempio di for e while:
+```bash
+for y in 1800 1900 2000 # Per gli anni nella lista
+do # Inizio operazione
+ cal 4 $y # Stampa il calendario di aprile
+done # Fine operazione
+
+for f in *.data; do mv $f $f.old; done
+for i in {0..7}; do touch $i.txt; done
+for i in `seq 0 7`; do touch $i.txt; done
+
+while true; do date; sleep 3; done 
+```
+Esempio di if:
+```bash
+Il costrutto if-then-else in bash
+– Inizia con if e termina con fi (dettagli qui)
+– La comparazione è tra [ ] e seguita da then
+● NB: gli spazi attorno a “[“ e “]” sono necessari!!
+– Gli operatori sono: -gt, -eq, -ne, -lt (dettagli qui)
+– E' possibile aggiungere elif ed else
+if [ $X -gt 42 ] # Se la variabile X è maggiore di 42
+then
+ # Fai una determinata operazione
+elif [ $X -eq 42 ] # Se invece la variabile X è uguale a 42
+then
+ # Fai un'altra operazione
+else # Se nessuna delle precedenti
+ # Fai un altro tipo di operazione
+fi # Chiusura dell'if
+```
+Esempio di parametri inline:
+```bash
+#!/bin/bash
+echo "Numero di parametri: $#"
+echo "Nome dello script : $0"
+echo "Primo parametro : $1"
+echo "Tutti i parametri : $@"
+for p in $@; do echo "Par = $p"; done
+```
+Esempio cambio suffisso:
+```bash
+#!/bin/bash
+OLDSUFF=$1
+NEWSUFF=$2
+for OLDNAME in *$OLDSUFF
+do
+ BASE=`basename $OLDNAME $OLDSUFF`
+
+ NEWNAME=$BASE$NEWSUFF
+
+ mv -v $OLDNAME $NEWNAME
+done
+```
