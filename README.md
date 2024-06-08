@@ -29,14 +29,34 @@
  - ` > ` reindirizzo a file ` >> ` reindirizzo e sovrascrivo
  - `column -t pWeb2.txt` per formattare l'output in colonne
  - `sed -e 's/testo/altro_testo/g' pWeb2.txt` si usa per le regex
-  - -e: esegui il comando seguente
-  - s: sostituisci
-  - /: separatore
-  - g: per ogni occorrenza
-  - ': inizio-fine dello script
+	- -e: esegui il comando seguente
+	- s: sostituisci
+	- /: separatore
+	- g: per ogni occorrenza
+	- ': inizio-fine dello script
+```bash
+Sostituisci Tizio con Caio
+[fisica@linux]$ sed -e 's/Tizio/Caio/g' file
+...
+Se la stringa da sostituire contiene "/" si può usare "|" come
+carattere di delimitazione. Es: cambia /usr/bin con /usr/local/bin
+[fisica@linux]$ sed 's|/usr/bin|/usr/local/bin|g' file
+...
+Stampa solo le righe tra 7 e 42
+[fisica@linux]$ sed -n -e 7,42p file
+...
+Stampa solo le righe tra le stringhe "inizio" e "fine"
+[fisica@linux]$ sed -n -e '/inizio/,/fine/p' file
+...
+Rimuovi tutte le righe contenenti la parola "windows"
+[fisica@linux]$ sed -e /windows/d file
+...
+Aggiungi spazi all'inizio di ogni linea (simbolo ^)
+[fisica@linux]$ sed -e 's/^/ /' file
+```
  - `awk '{print $2, $5}' pWeb2.txt` $num seleziona la colonna desiderata, si usa per selezionare
-  - `awk '!/Resid/ {print $2, $5, $6/$7}' pWeb3.txt` Solo le linee che non (!) contengono stringa “Resid”,Divisione tra colonne
-  - `awk '{n=n+1; s=s+$3} END{print "Media " s/n}' pWeb3.txt` fa la media di una colonna
+	- `awk '!/Resid/ {print $2, $5, $6/$7}' pWeb3.txt` Solo le linee che non (!) contengono stringa “Resid”,Divisione tra colonne
+	- `awk '{n=n+1; s=s+$3} END{print "Media " s/n}' pWeb3.txt` fa la media di una colonna
 ```bash
     Stampa il prodotto delle colonne 2 e 4 se la riga contiene “MHz”
     [fisica@linux]$ awk '/MHz/ {print "prodotto= " $2*$4 }' file
@@ -57,3 +77,5 @@
     Stampa solo le righe comprese tra la parola inizio e quella fine
     [fisica@linux]$ awk '/inizio/,/fine/' file
 ```
+Per i file csv usare:
+> awk 'FS= "," {print $7}' myDataset.csv 
