@@ -1,6 +1,7 @@
 # Appunti
 # Comandi importanti
  - `tar czf ilbackup.tgz tesi` per zippare con tar
+ - `tar -xvf ciao.tgz` per unzippare con tar
  - `chmod +x ciao.sh` per rendere eseguibili i file
  - `ssh studente@pcatl01.pv.infn.it` per collegarsi a un pc, dopo va inserita la password
  - `scp studente@pcatl01.pv.infn.it:/etc/passwd .` Copia il file /etc/passwd dal nodo remoto, alla directory corrente del nodo locale “.”
