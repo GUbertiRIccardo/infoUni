@@ -216,6 +216,7 @@ wlan: schema wireless
 - `nmap 192.168.1.1-255` scan completo della rete locale
 - `uptime` per vedere quanto è up un server
 - `tcpdump -i eth0` Traffico dati visto dalla scheda di rete ethernet in mezzo secondo su una rete del dipartimento.
+- `arp -a` per vedere quali computer sono connessi alla tua sottorete
 ```bash
 # Sniff di tutti i pacchetti visti dall'interfaccia ethernet
 [root@linux]$ tcpdump -i eth0
