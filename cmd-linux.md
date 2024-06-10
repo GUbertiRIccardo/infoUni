@@ -214,6 +214,7 @@ wlan: schema wireless
 - I file in `/var/log` mostrano i log di sistema
 - `nmap -A -T4 192.168.1.1` scopre le porte aperte su un host, con l'indirizzo del router LAN
 - `nmap 192.168.1.1-255` scan completo della rete locale
+- `uptime` per vedere quanto è up un server
 - `tcpdump -i eth0` Traffico dati visto dalla scheda di rete ethernet in mezzo secondo su una rete del dipartimento.
 ```bash
 # Sniff di tutti i pacchetti visti dall'interfaccia ethernet
