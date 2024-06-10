@@ -65,6 +65,7 @@ for i in $(seq 1 7); do echo cap$i; done
   - `-n` prende il numero di linea
  - `head` legge le prime righe
  - `tail` legge le ultime
+ - `file --mime-type ciao` per identificare il tipo di file
  - `links2 -dump http://www.comuni-italiani.it/province.html` browser testuale -dump toglie l'interattività
  - ` > ` reindirizzo a file ` >> ` reindirizzo e sovrascrivo
  - `column -t pWeb2.txt` per formattare l'output in colonne
