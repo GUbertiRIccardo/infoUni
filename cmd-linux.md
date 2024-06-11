@@ -66,6 +66,23 @@ for i in $(seq 1 7); do echo cap$i; done
  - `head` legge le prime righe
  - `tail` legge le ultime
  - `file --mime-type ciao` per identificare il tipo di file
+```bash
+1. find . -name thisfile.txt
+
+If you need to know how to trovare a file in Linux called thisfile.txt, it will look for it in current and sub-directories.
+
+2. find /home -name *.jpg
+
+Cerca tutti i .jpg files in the /home and directories below it.
+
+3. find . -type f -empty
+
+Look for an empty file inside the current directory.
+
+4. find /home -user randomperson-mtime 6 -iname ".db"
+
+Look for all .db files (ignoring text case) that have been changed in the preceding 6 days by a user called randomperson.
+```
  - `links2 -dump http://www.comuni-italiani.it/province.html` browser testuale -dump toglie l'interattività
  - ` > ` reindirizzo a file ` >> ` reindirizzo e sovrascrivo
  - `column -t pWeb2.txt` per formattare l'output in colonne
