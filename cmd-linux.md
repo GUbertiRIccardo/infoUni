@@ -216,7 +216,7 @@ do
 done
 ```
 # Network
-> L'ip è visibile tramite `ifconfig` oppure `ip addr`
+> L'ip è visibile tramite `ifconfig` oppure `ip addr` o meglio per vedere IPV4 pubblico `curl ifconfig.me`
 ```
 lo: loopback, il nodo stesso
 eth: scheda ethernet (cavo)
