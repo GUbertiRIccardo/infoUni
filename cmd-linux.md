@@ -43,6 +43,31 @@ for i in `seq 1 7`; do echo cap$i; done
 for i in $(seq 1 7); do echo cap$i; done
 ```
 
+# PICCOLO APPUNTO SU I PERMESSI
+What number is -rw-r--r-- Linux?
+
+    4 = r (Read)
+    2 = w (Write)
+    1 = x (eXecute)
+
+It is 644.
+
+There are 10 dashes. First dash represents if it is a file or a directory, next 9 dashes are divided into 3 group ie (owner,group,others).
+
+In your case, rw- read and write permission for the owner.
+
+Next three represents the permission for the group r-- readonly permission for group. User who are part of this group will have readonly permission
+
+Last three dash represents the permission for other users who is not owner of the file or part of the group.
+
+File permission can be changed by file owner by executing chmod command with the combination of above numbers
+
+Eg
+
+#chmod 755 filename (rwxr-xr-x)
+
+#chmod 777 filename (rxwrwxrwx)
+
 # Comandi Linux non noti
  - `df -h` stampa i filesystems montati e l'utilizzo
  - `df -hT` stampa i dischi montati e l'utilizzo
