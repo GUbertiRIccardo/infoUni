@@ -71,6 +71,7 @@ Eg
 # Comandi Linux non noti
  - `df -h` stampa i filesystems montati e l'utilizzo
  - `df -hT` stampa i dischi montati e l'utilizzo
+ - `od -t x4 eventSamples.data` vede il binario
  - `mount` monta una partizione
  - `unmount` smonta una partizione
  - `cat /proc/cpuinfo` è dove si trovano le info di sistema `cat /proc/meminfo `
@@ -272,4 +273,138 @@ wlan: schema wireless
 ...
 # Sniff del solo traffico www
 [root@linux]$ tcpdump -i eth0 port 80
+```
+
+# Manipolazione file in binario
+```
+ Dopo aver scaricato il file eventSamples.data, "guardatelo" con od -t x4. I comandi head o less in pipe permettono di vedere solo le prime righe o di scorrere pagina per pagina
+
+[user@host]$  od -t x4 eventSamples.data |head
+0000000 aa1234aa 0004b408 00000233 04000000
+0000020 00795010 00000001 00000000 00000000
+0000040 4e770195 0ca45be9 05c99d61 00000000
+0000060 0002e42b 000001e2 c0002783 000004a1
+0000100 00000080 00000018 00000007 00400000
+0000120 00000025 4180004f 00000406 00080100
+0000140 00c00000 00060808 00000004 00000000
+0000160 00000000 00000001 00000404 00000100
+0000200 00400000 00060808 00000000 00000000
+0000220 00000000 00000000 00000004 00000100
+
+La prima colonna sono gli offset in formato ottale rispetto all'inizio del file. Quindi 20 in ottale significa 2*8^1 + 0*8^0 = 16 bytes. Le altre colonne sono i dati in formato esadecimale.
+
+Ora contare il numero di eventi è semplice, basta il comando grep
+
+[user@host]$  od -t x4 eventSamples.data | grep aa1234aa
+0000000  aa1234aa 0004b408 00000233 04000000
+4550040  aa1234aa 0004b095 00000233 04000000
+11311160 00000000 aa1234aa 00047d66 0000027f
+15704000 00000001 00002944 00000000 aa1234aa
+
+[user@host]$  od -t x4 eventSamples.data | grep aa1234aa | wc
+4
+
+Con grep si possono contare anche i sottorivelatori
+
+[user@host]$  od -t x4 eventSamples.data | grep ee1234ee | wc
+6360
+
+In ogni evento ci sono quindi 6360/4=1590 sottorivelatori.
+
+
+Scoprire quale parola dell'header di evento codifica le dimensioni dell'evento è un po' più complesso, ma ci si può arrivare col ragionamento. Innanzitutto, sappiamo che ci sono 4 eventi nel file e la sua dimensione in bytes la possiamo sapere con ls -l
+
+[user@host]$  ls -l eventSamples.data 
+-rw-r--r--. 1 fisica unipv 4800544 Feb 17 17:30 eventSamples.data
+
+Quindi la dimensione media di un evento sarà 4800544/4=1200136 bytes. Visto che si lavora in word da 4 bytes, è anche utile tenere a mente la dimensione media in word: 1200136/4=300034 word.
+
+Ok, ora dobbiamo cercare quale parola dell'header di evento contiene numeri dell'ordine di 1200136 bytes o 300034 word.
+
+Ripertiamo ora il comando di qualche riga fa e analizziamo le word che seguono aa1234aa.
+
+[user@host]$  od -t x4 eventSamples.data | grep aa1234aa
+0000000  aa1234aa 0004b408 00000233 04000000
+4550040  aa1234aa 0004b095 00000233 04000000
+11311160 00000000 aa1234aa 00047d66 0000027f
+15704000 00000001 00002944 00000000 aa1234aa
+
+La terza parola dopo aa1234aa è sempre uguale (04000000) e quindi non può essere la dimensione. La seconda è troppo piccola: 233. La prima (0004b408, 00047d66, 0000027f) vi insospettisce? Provate a trasformarla da esadecimale in decimale, basta sviluppare le potenze di 16 come spiegato a lezione oppure barate e chiedete a google "0x4b408 in decimal".
+
+In entrambi i casi troverete che : 0x4b408 = 308232, 0x47d66=294246, ecc. Esattamente l'ordine di grandezza delle dimensioni in word. Quindi, la parola che codifica le dimensioni e' quella che segue aa1234aa
+
+Per fare uno script che stampi le dimensioni, occorre trovare il modo per leggere sempre la parola che segue aa1234aa. Innanzi tutto può essere utile stampare i dati in una solo colonna. Leggendo la man page di od si scopre che -w4 fa al caso nostro.
+
+[user@host]$  od -w4 -t x4  eventSamples.data | head
+0000000 aa1234aa
+0000004 0004b408
+0000010 00000233
+0000014 04000000
+0000020 00795010
+0000024 00000001
+0000030 00000000
+0000034 00000000
+0000040 4e770195
+0000044 0ca45be9
+
+Ora leggendo la man page di grep si scopre che c'è un'opzione (-A n) che stampa le n righe seguenti a una parola trovata
+
+[user@host]$ od -w4 -t x4  eventSamples.data | grep -A 1 aa1234aa
+0000000 aa1234aa
+0000004 0004b408
+--
+4550040 aa1234aa
+4550044 0004b095
+--
+11311164 aa1234aa
+11311170 00047d66
+--
+15704014 aa1234aa
+15704020 00046e03
+
+Ora basta togliere le righe con aa1234aa e mantenere solo quelle che hanno almeno uno 0 (per eliminare le linee "--")
+
+[user@host]$ od -w4 -t x4  eventSamples.data | grep -A 1 aa1234aa | grep -v "aa1234aa" | grep 0
+0000004 0004b408
+4550044 0004b095
+11311170 00047d66
+15704020 00046e03
+
+L'ultimo step è stampare solo la seconda colonna:
+
+[user@host]$ od -w4 -t x4  eventSamples.data | grep -A 1 aa1234aa | grep -v "aa1234aa" | grep 0 | awk '{print $2}'
+0004b408
+0004b095
+00047d66
+00046e03
+
+E' ora possibile scrivere lo script con un editor. Questa è una possibile versione:
+
+[user@host]$ cat size.sh 
+FILE=$1
+od -w4 -t x4  $FILE | grep -A 1 aa1234aa | \
+     grep -v "aa1234aa" | grep 0 | awk '{print "Size in word 0x" $2}'
+
+[user@host]$ chmod +x size.sh
+[user@host]$ ./size.sh eventSamples.data 
+Size in word: 0x0004b408
+Size in word: 0x0004b095
+Size in word: 0x00047d66
+Size in word: 0x00046e03   
+
+Come modifichereste lo script per stampare in decimale? Una soluzione è questa qui sotto, cercate di capire quali modifiche sono state fatte.
+
+[user@host]$ cat size.sh 
+FILE=$1
+od -w4 -t d4  $FILE | grep -A 1 1441647446 | \
+    grep -v "1441647446" | grep 0 | awk '{print "Size in word: " $2}'
+
+[user@host]$ ./size.sh eventSamples.data 
+Size in word: 308232
+Size in word: 307349
+Size in word: 294246
+Size in word: 290307
+
+
+
 ```
