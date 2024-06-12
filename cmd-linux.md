@@ -79,6 +79,7 @@ Eg
  - `bc` è la calcolatrice
  - `tr ":" "\n"` sostituisce tutti i : con \n
  - `sort listaNomi | uniq` sorta un file e toglie i doppioni
+ - `sort -k3` sorta per la terza colonna
  - `paste nazionale82 nazionale06` affianca due file
  - `seq 1 4 21` genera una sequenza da 1 a 21 con step = 4
  - `basename /bin/date` basename rimuove le directory dall'indirizzo assoluto di un file
