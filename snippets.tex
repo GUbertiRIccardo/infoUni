@@ -1,0 +1,199 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage[italian]{babel}
+\usepackage[T1]{fontenc} 	
+\usepackage[utf8x]{inputenc}	%per caratteri accentati
+\usepackage{comment}
+
+\usepackage{textcomp}  		%per virgolette singole
+
+\usepackage{amsmath} 		%necessari entrambi per matematica
+\usepackage{amssymb}
+
+
+\usepackage{listings}		%per il codice
+
+
+
+\begin{document}
+\title{Code snippets}
+\author{Pietro Gambazza}
+\maketitle
+
+\section{Unix}
+
+\subsection{Miscellanea}
+
+\begin{description}
+\item[uptime] dice da quanto tempo il sistema e' in funzione
+\item[who] lista utenti collegati alla macchina
+\item[chmod +xrw] 
+\item[chmod ugo-xrw] u-tente g-roup o-thers x-ecute r-read w-rite (tutto attaccato!)
+\item[mv *.??? /dir ] sposta tutti i file che finiscono con un punto e tre caratteri
+\item[ls {cxx, h}] mostra tutti i file che finiscono per cxx o h
+\item[echo {a..z}] stampa tutte le lettere tra la a e la z
+\item[echo {2..32}] stampa tutti i numeri fra 2 e 32
+\item[echo {a..c}{1..3}] stampa tutte le combinazioni
+\item[cat file1 file2 ...	] concatena i file e li stampa a terminale
+\item[head ] stampa prime 10 righe
+\item[tail -2] stampa ultime 2 righe
+\item[>] reindirizza output in un file
+\item[>>] reindirizza e sovrascrive
+\item[env] stampa tutte le variabili definite nella shell corrente
+\item[|] rendirizza l'output di un comando nell'input di un altro
+\item[sort -nr -k 2 file.txt] riordina -n numerico -r reversed -k 2 seguendo la seconda colonna
+\item[find . -name "file"] cerca . a partire dalla directory corrente -name per nome nelle sottodirectory
+\item[locate "file"] cerca i file in un database aggiornato giornalmente
+\item[ps -ef] stampa tutti i processi
+\item[top]
+\item[kill PID]
+\item[touch file.txt ] aggiorna la data di un file - se non esiste crea un file vuoto
+\item[diff file1 file2] trova le differenze, se sono ASCII le stampa, se binari dice solo se diversi
+\item[sleep n] freeza per n second
+\item[time] restituisce tempo di esecuzione di un comando
+\item[file] ti dice il tipo di file e altre info
+\item[which] cerca un comando nella lista PATH e stampa l'indirizzo
+\item[gzip/gunzip]
+\item[gzip -v "file"] -v dice di quanto è stato compresso
+\item[tar czf "out" "in"] c-reate z-ip f-nome fileout
+\item[tar tzf] lista contenuto archivio
+\item[tar xzf] espande l'archivio
+\item[hexdump -C file] -C compara esadecimale e ASCII
+\item[hexdump -C file | head -2] ottengo header del file (utile per capire il tipo)
+\item[df -hT] mostra file system (cerca /dev e ext)
+\item[mount/umount ] per s-montare una partizione
+\item[cat /proc/cpuinfo] info CPU
+\item[cat /proc/meminfo] info RAM (prima riga)
+\item[free --giga] RAM
+\item[ls -1 /proc/PID] mostra tutte le info di un programma in esecuzione con quel PID
+\item[bc] calcolatrice
+\item[tr ":" "," file] sostituisce tutti i : con ,
+\item[tr -d ":" file] rimuove i :
+\item[uniq] rimuove linee doppie (di solito prima sort poi uniq)
+\item[paste file1 file2] affianca due file riga per riga
+\item[seq 1 4 21] genera sequenza fra 1 e 21 con passo 4
+\item[basename -s .txt file.txt] rimuove suffisso -s da un file
+\item[watch -n 5 ] mostra l'output di uno stesso comando ogni n secondi
+\item[pdffont] mostra font di un pdf
+\item[pdfimages] estrae pagine di un pdf
+\item[pdfunite] unisce più pdf
+\item[pdfseparate] separa pdf
+\item[pdfjam "file" -o "out" --nup 2x1 --landscape] unisce due pagine in una
+
+\end{description}
+
+\subsection{grep, awk, sed}
+\begin{description}
+\item[grep filter file] filtra solo le linee che contengono filter
+\item[grep -iv filter file] -i case insensitive -v invert (non contengono filter)
+\item[grep -n filter file] - n prende numero di linea
+\item[column -t file] allinea output in colonne\\
+\item[sed -e \textquotesingle s/testo/altrotesto/g\textquotesingle] -e esegui s sostituisci g per ogni occorrenza
+\item[sed -n -e 7,42p file] stampa solo le righe tra 7 e 42
+\item[sed -n -e \textquotesingle/inizio/,/fine/p\textquotesingle\ file] stampa solo le righe tra le stringhe "inizio" e "fine"
+\item[sed -e /windows/d file] rimuovi tutte le righe contenenti la parola "windows"
+\item[sed -e \textquotesingle s/\^{}/ /\textquotesingle\ file] aggiungi spazi all'inizio di ogni linea (simbolo \^{})\\
+\item[awk \textquotesingle\{print \$2, \$5\}\textquotesingle\   file.txt] '' delimitano inizio-fine script {} delimitano blocco istruzioni \$num seleziona colonna
+\item[awk \textquotesingle!/word/ \{print \$2, \$5, \$6/\$7\}\textquotesingle\  file.txt] solo linee che non contengono "word" / divisione fra colonne
+\item[awk \textquotesingle\$4 > 42 \&\& \$2 < 7\textquotesingle\   file] stampa solo le righe con il valore della colonna 4 maggiore di 42 e il valore della colonna 2 minore di 72
+\item[awk \textquotesingle/inizio/,/fine/\textquotesingle\   file] stampa solo le righe comprese tra la parola inizio e quella fine
+
+\end{description}
+
+
+\subsection{Shell script}
+\begin{description}
+\item[A="assegno stringa"] assegnazione variabile, NO SPAZI
+\item['comando'   \$(comando)] command substitution
+\item[Esempio Backup tesi]:
+\begin{lstlisting}[language = sh]
+FILE=tesi.`date "+%y%m%d.%H%M"`.tgz
+DIR=tesi
+echo "ciao ciccio faccio il backup"
+tar czf $FILE $DIR
+ls -l $FILE
+echo "fatto capo"
+\end{lstlisting}
+\item[for f in *.data; do mv \$f \$f.old; done] 
+\item[for i in \{0..7\}; do touch \$i.txt; done] genera la sequenza
+\item[for i in \textquotesingle seq 0 7\textquotesingle; do touch \$i.txt; done] genera la sequenza
+\item[while true; do date; sleep 3; done]
+\item[if then else]: gli spazi servono!
+\begin{lstlisting}[language = sh]
+if [ $X -gt 42 ] 	# Se la variabile X e' maggiore di 42
+then
+			# Fai una determinata operazione
+elif [ $X -eq 42 ] # Se invece la variabile X e' uguale a 42
+then
+			# Fai un'altra operazione
+else 			# Se nessuna delle precedenti
+			# Fai un altro tipo di operazione
+fi 			# Chiusura dell'if
+\end{lstlisting}
+\item[-gt, -eq, -ne, -lt] greater, equal, notequal, less
+\item[Command line parameters]:
+\begin{lstlisting}[language = sh]
+echo "Numero di parametri: $#"
+echo "Nome dello script : $0"
+echo "Primo parametro : $1"
+echo "Tutti i parametri : $@"
+for p in $@; do echo "Par = $p"; done
+\end{lstlisting}
+
+\end{description}
+
+\subsection{Network}
+\begin{description}
+\item[ifconfig] visualizza IP, MAC wlp2s0(wifi) enp0s31f6(ethernet) lo(loopback)
+\item[ip addr] come ifconfig
+\item[curl ifconfig.me] stampa indirizzo IP WAN
+\item[22] porta SSH
+\item[80] porta HTTP
+\item[25] porta email
+\item[ping info.cern.ch] verifica se nodo attivo o meno (tempo di volo)
+\item[tracepath www.infn.it] ricostruisce tragitto pacchetti
+\item[telnet info.cern.ch 80] per connettersi a mano alle porte
+\item[nmap -A -T4 192.168.1.1] scan delle porte aperte in un nodo
+\item[nmap 192.168.1.*] scan di tutta la rete (controlla chi è connesso)
+\item[lsof] mostra tutti file aperti
+\item[Script esplora rete locale]:
+\begin{lstlisting}[language = sh]
+#!/bin/bash
+
+BASE=192.135.12.             # Rete da esplorare  
+for i in `seq 1 254`         # loop per i che va da 1 a 254
+do
+   IND=$BASE$i                # indirizzo, es: 192.168.1.7
+   ping -c 1 -W 1 $IND > /dev/null  # esegue ping 
+                                    # buttando via l'output
+   if [ $? -eq 0 ]            # se ping ritorna OK (0)     
+     then echo "$IND usato"   # scrive: 192.168.1.x usato
+     else echo "$IND"         # oppure scrive: 192.168.1.x
+   fi
+done
+\end{lstlisting}
+\end{description}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}

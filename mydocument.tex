@@ -1,0 +1,234 @@
+\documentclass[a4paper, 12pt]{article} % ogni documento deve contenere almeno la dichiarazione della classe. 
+
+
+%\usepackage[T1]{fontenc}
+\usepackage[italian]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{lipsum} % per generare testi lunghi a caso
+\usepackage{multicol} % per impaginare con più colonne
+\usepackage{enumerate} % gestisce elenchi puntati
+\usepackage{enumitem} % gestisce elenchi puntati
+\usepackage{verbatim} % per scrivere pezzi di codice interpretati letteralmente
+
+%%%% MATEMATICA
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+%%%% FIGURE
+\usepackage{graphicx}
+\usepackage{caption}
+% \captionsetup{tableposition=top, figureposition=bottom} % solo specificando top in questo modo le caption scritte sopra alla figura verranno visualizzate sopra alla figura.
+
+%%% BIBLIOGRAFIA
+% specifichiamo lo stile delle citazioni
+\bibliographystyle{plain}
+
+%%%% nuovi comandi definiti dall'utente
+\newcommand{\ta}{\left(} % parentesi tonda aperta
+\newcommand{\tc}{\left)} % parentesi tonda chiusa
+\newcommand{\ecm}[2][kJ]{\ensuremath{E_{\textrm{CM}} = {#2}}~\textrm{#1}} % struttura più complessa. Si assicura che sia scritto in ambiente matematico ed elimina la formattazione matematica in parte di essa (textrm). Inoltre prende in input due parametri e specifica il default per il primo di essi: "kJ"
+
+
+\title{Il mio template perfetto per \LaTeX} % \LaTeX è un comando speciale che stampa il simbolo logo di latex
+
+\date{\today} % per non stampare la data usare \date{}
+\author{Nicolò Valle, nicolo.valle@unipv.it}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% qui finisce il PREAMBOLO
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document} 
+
+\maketitle  % stampa titolo, autore e data
+
+\begin{abstract}
+  Questo è l'abstract del mio articolo.
+  \lipsum[1] % un testo abbastanza lungo solo per controllare l'impaginazione
+\end{abstract}
+
+
+\tableofcontents % stampa l'indice: compilare due volte per aggiornarlo
+
+
+% \chapter{Capitolo con Hello world} % i capitoli non si possono usare con article
+
+\section{Hello world}
+
+% Gli spazi consecutivi sono ignorati. Solo uno spazio viene stampato
+Hello world! Questo                  documento è stato generato il \today.
+
+%\vspace{1cm} % per forzare una spaziatura verticale
+
+E oggi è proprio quel giorno.
+Anche andare a capo una volta viene interpretato come un singolo spazio.
+
+Occorre lasciare una linea bianca per andare davvero a capo.
+
+% \twocolumn % due colonne da questo punto in poi. Si potrebbe anche usare l'ambiente \begin{multicols}{2} .... \end{multicols}
+
+
+
+
+\section{Elenchi puntati}
+
+\begin{itemize} % enumerate per gli elenchi numerati
+\item Prima linea
+\item[-] Seconda linea % ho cambiato lo stile del bullet
+	\begin{itemize}
+		\item Prima linea nested
+	\end{itemize}
+\end{itemize}
+
+
+\section{Matematica}
+
+% un'equazione numerata : \begin{equation}... \end{equation}
+\begin{equation}
+  \label{eq:sin} % in qualunque punto del testo potrò chiamare \ref{eq:sin} 
+  g(x;\mu,\sigma) = \frac{1}{\sqrt{2\pi}\, \sigma} \, e^{-\frac{1}{2} \frac{(x-\mu)^2}{\sigma^2}} \quad \textrm{and} \quad \int_{\mathbb R} g(x;\mu,\sigma) dx = 1 \ \forall \ \mu, \, \sigma > 0 
+\end{equation}
+
+% come sopra, ma il nome  è personalizzato tramite il comando \tag{}
+\begin{equation}
+  \label{eq:sin2} % evitare di ridefinire lo stesso nome
+  g(x;\mu,\sigma) = \frac{1}{\sqrt{2\pi}\, \sigma} \, e^{-\frac{1}{2} \frac{(x-\mu)^2}{\sigma^2}} \quad \textrm{and} \quad \int_{\mathbb R} g(x;\mu,\sigma) dx = 1 \ \forall \ \mu, \, \sigma > 0 \tag{\$}
+\end{equation} 
+
+
+% un'equazione non numerata: \[ .. \]
+\[
+\begin{gathered} % equazione multilinea
+\mbox{a.)}\ \ \sum_{n=2}^{\infty} \frac{\ln(n)}{n^3} (x-5)^n \qquad \qquad 
+\mbox{b.)}\ \ \sum_{n=2}^{\infty} \frac{\ln(n)}{n^2} (x-5)^n \\
+\mbox{c.)}\ \ \sum_{n=2}^{\infty} \frac{\ln(n)}{n} (x-5)^n
+\end{gathered}
+\]
+
+
+Questa è un'equazione in linea: $y = f(x)+\lambda$. In cui uso la mia definizione per il simbolo dell'energia nel centro di massa: $\ecm{91}$ o \ecm{91} vanno entrambi bene perchè le definzione include \verb!\ensuremath!. %
+
+%referenze a equazione o altri elementi:
+Gaussina: vedi equazione \ref{eq:sin}  o \eqref{eq:sin} a pagina \pageref{eq:sin}.
+
+\section{Figure}
+
+% ambiente figura che chiediamo di posizionare "qui" (con [h]) e forziamo il posizionamento con [!]
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.5\textwidth]{atlas.pdf}
+  \includegraphics[width=0.3\textwidth]{atlas.png} % pdf, png, jpg, eps sono formati supportati.
+  \caption{Higgs Boson signal at $m_H = 126\, \textrm{GeV}$. \label{fig:atlas}}
+\end{figure}
+
+Così come per le equazioni aggiungo una referenza: i risultati di ATLAS sono mostrati in figura \ref{fig:atlas}.
+
+\section{Bibliografia}
+
+% usiamo bibtex. La bibliografia si può gestire anche con l'ambiente "thebibliography"
+
+% più sotto il comando \bibliography importa il file .bib. Ora posso usare le citazioni in esso definite.
+
+Ecco la citazione per l'articolo di ATLAS: \cite{Aad_2012}.
+
+Per compilare la bibliografia o aggiornarla occorre procedere a step:
+
+\begin{verbatim}
+pdflatex mydocument.tex
+bibtex mydocument.aux
+pdflatex mydocument.tex
+pdflatex mydocument.tex
+\end{verbatim}
+
+
+\bibliography{mybib} % occorre avere un file con nome mybib.bib nella cartella di lavoro
+
+
+
+%%%%%%%%
+% ORA QUALCOSA IN PIU
+%%%%%%%&
+
+% forziamo una nuova pagina
+
+\pagebreak
+
+
+% evitiamo di stampare il numero di pagina:
+\thispagestyle{empty}
+
+
+% minipage crea floating box in cui è possibile impaginare altro materiale
+
+\begin{minipage}[b]{0.5\textwidth}
+
+  \sffamily %cambio font
+  \textbf{Università di Pavia}
+  
+  \vspace{0.1cm}
+  
+  \textbf{Dipartimento di FISICA}
+  
+  \vspace{0.4cm}
+
+  \begin{flushright}
+  
+    Corso di Metodi Informatici della Fisica \\
+    A.A. 2023-24
+
+  \end{flushright}
+
+\end{minipage}
+\begin{minipage}[b]{0.48\textwidth}
+  $\quad$\includegraphics[width=0.8\textwidth]{einstein.jpeg}
+\end{minipage}
+
+\vspace{2cm}
+
+
+\noindent Si certifica che il giorno \today
+
+\begin{center}
+
+\Large
+
+% uso il grassetto con \bf. E importo il contenuto di un altro file name.tex
+% tutto ciò che si può fare da command line può diventare facilmente uno script. Ad esempio... uno script che scrive il nome del partecipente in name.tex e compila questo documento genera automaticamente il certificato di partecipazione!
+{\bf
+  \input{name.tex}
+}
+
+
+\end{center}
+
+\normalsize
+
+\noindent ha partecipato all'entusiasmante corso introduttivo su \LaTeX.
+
+Il corso è stato progettato per fornire una panoramica delle funzionalità di \LaTeX, un linguaggio di markup ampiamente utilizzato per la preparazione di documenti tecnici e scientifici. Durante il corso, il partecipante ha dimostrato competenze in:
+
+\begin{itemize}[label={-}]
+\item introduzione ai principi fondamentali di \LaTeX;
+\item creazione e formattazione di documenti;
+\item utilizzo di comandi di base per la strutturazione del testo;
+\item gestione di tabelle e figure;
+\item creazione di equazioni e formule matematiche;
+\item gestione delle bibliografie.
+\end{itemize}
+
+
+
+Con l'acquisizione di queste competenze, il partecipante è ben equipaggiato per utilizzare \LaTeX in una vasta gamma di contesti accademici e professionali.
+
+\vspace{1cm}
+
+\flushright
+
+Pavia, \today
+
+
+
+
+
+
+\end{document}
