@@ -1,0 +1,50 @@
+PROGETTO DI SIMULAZIONE DEL SISTEMA SOLARE
+Simulazione in 2D del sistema solare
+
+COMPILAZIONE
+Per compilare il progetto
+  ./compila.sh  CorpoCeleste.cxx Simulazione.cxx SistemaSolare.cxx Vettore.cxx
+
+CONFIGURAZIONE
+Nella directory sono presenti 3 file di configurazione, 
+   ParametriAfelio.txt
+   ParametriMedi.txt
+   ParametriPerielio.txt
+che descrivono le condizioni iniziali dei pianeti coinvolti nella simulazione. 
+Nella fattispecie: nome, massa, vettore posizione, vettore velocità.
+I dati sono stati presi dal sito
+   https://nssdc.gsfc.nasa.gov/planetary/factsheet
+E' possibile includere/escludere i pianeti dalla simulazione inserendo 
+un # all'inizio della riga corrispondente.
+
+ESECUZIONE
+Il programma si attende 3 parametri da linea di comando
+  ./a.out ConfFile anni metodo
+dove
+  - ConfFile: il nome del file di configurazione
+  - anni:     gli anni di evoluzione
+  - metodo:   il metodo di evoluzione lineare
+               0 = standard
+               1 = media accelerazioni
+
+PROMPT INTERATTIVO
+Al termine della simulazione il programma presenta un prompt di comando
+che accetta 2 parametri: una stringa e un numero. Devono essere sempre
+presenti entrambi. 
+I possibili comandi sono:
+  - list n: lista degli istogrammi disponibili, con n numero qualsiasi
+  - evo  n: ulteriore evoluzione di n anni
+  - Pia  n: mostra l'istogramma n del pianeta Pia (usare le prime tre 
+            lettere del nome, es: Ter 3, Mer 8, ecc).
+  - exit n: passa il comando alla finestra di root per poter salvare
+            gli istogrammi, fare lo zoom, ecc. Il valore di n è ignorato.
+            Per ripassare il comando al prompt, dalla finestra di root: 
+            file->quit_root
+
+
+
+
+
+
+
+https://nssdc.gsfc.nasa.gov/planetary/factsheet

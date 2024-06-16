@@ -1,0 +1,19 @@
+# Le linee che iniziano con "#" sono commenti e quindi 
+# sono ignorate del codice
+#
+# Parametri orbitali medi
+#
+# Pianeta     Massa     Pos.X   Pos.Y   Vel.X    Vel.Y  
+Sole        1.98e30         0       0       0        0
+#Mercurio    3.30e23    57.8E9       0       0    47873
+#Venere      4.87e24   108.2E9       0       0    35021
+Terra       5.97e24   149.6E9       0       0    29786
+#Marte       6.42e23   227.9E9       0       0    24131
+#Giove       1.90e27   778.4E9       0       0    13070
+#Saturno     5.69e26  1427.4E9       0       0     9672
+#Urano       8.68e25  2871.0E9       0       0     6836
+#Nettuno     1.02e26  4498.3E9       0       0     5478
+
+# Luna sta alla posizione della terra + 384.4E6 
+# e la vel è +1022
+Luna        7.34e22   150.0E9       0       0    30808 

@@ -1,0 +1,21 @@
+# Le linee che iniziano con "#" sono commenti e quindi 
+# sono ignorate del codice
+#
+# Parametri orbitali all'afelio
+# Dati presi dal sito:
+#   https://nssdc.gsfc.nasa.gov/planetary/factsheet
+#
+# Pianeta     Massa     Pos.X   Pos.Y   Vel.X    Vel.Y  
+Sole        1.98e30         0       0       0        0
+Mercurio    3.30e23    69.8E9       0       0    38860    
+Venere      4.87e24   108.9E9       0       0    34790   
+Terra       5.97e24   152.1E9       0       0    29290   
+Marte       6.42e23   249.2E9       0       0    21970   
+Giove       1.90e27   816.6E9       0       0    12440   
+Saturno     5.69e26  1514.5E9       0       0     9090   
+Urano       8.68e25  3003.6E9       0       0     6490   
+Nettuno     1.02e26  4545.7E9       0       0     5370    
+
+# Luna sta alla posizione della terra + 384.4E6 
+# e la vel è +1022
+#Luna        7.34e22   150.0E9       0       0    29808 
