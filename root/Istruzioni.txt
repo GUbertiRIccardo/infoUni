@@ -1,0 +1,30 @@
+Esercizio sulla classe TMatrixF di root (la "F" sta per float).
+La directory contiene il file sorgente TMatrixF.cxx e lo script compila.sh
+da utilizzare per compilazione:  ./compila.sh TMatrixF.cxx
+
+L'interfaccia della classe e' disponibile online nelle pagine di documentazione
+della classe TMatrixF e della sua class base TMatrixTBase (cioe' i metodi pubblici
+della classe base sono ovviamente metodi anche della classe derivata):
+ - https://root.cern.ch/root/html/TMatrixT_float_.html
+ - https://root.cern.ch/root/html/TMatrixTBase_float_.html
+
+Compito, aggiungere le seguenti operazioni al codice
+
+ 1. Stampare il determinante della matrice 
+
+ 2. Creare la matrice n, copia di m
+
+ 3. Invertire la matrice m
+
+ 4. Creare una matrice k, prodotto delle matrici precedenti
+
+ 5. Verificare che la risultate sia simmetrica (usare il metodo apposito)
+
+ 6. Modificare m in modo che ogni elemento sia uguale al suo quadrato
+
+ 7. "Trovare" una matrice di elementi compresi tra 0 e 10 ed avente determinante 
+    maggiore di 100. Suggerimento: le linee seguenti randomizzano la matrice x 
+    con numeri compresi tra 0 e 1 e con seme iniziale uguale a 7
+       double s = 7;
+       x.Randomize( 0, 1, s);
+
